@@ -18,7 +18,7 @@ HOW TO RUN:
 3. Open phpMyAdmin.
 4. Import database.sql.
 5. Open:
-   http://localhost/mybudget_with_register_users_reports/login.html
+   http://localhost/mybudget_tracker/index.php
 
 MAIN FILES:
 - login.html

@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyBudget | Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="bow">🎀</div>
+      <div>
+        <h1>MyBudget</h1>
+        <p>Expense Tracker 💗</p>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-link active" href="#" data-page="dashboard">
+        <i class="fa-solid fa-house"></i> Dashboard
+      </a>
+      <a href="#" id="openBudgetSide">
+        <i class="fa-solid fa-piggy-bank"></i> Set Budget
+      </a>
+      <a class="nav-link" href="#expenses-section" data-page="expenses">
+        <i class="fa-solid fa-wallet"></i> Expenses
+      </a>
+      <a href="#" id="openExpenseSide" class="locked-link" aria-disabled="true">
+        <i class="fa-solid fa-circle-plus"></i> Add Expense
+        <i class="fa-solid fa-lock lock-icon"></i>
+      </a>
+      <a class="nav-link" href="#" data-page="categories">
+        <i class="fa-solid fa-table-cells-large"></i> Categories
+      </a>
+      <a class="nav-link" href="#" data-page="reports">
+        <i class="fa-solid fa-chart-column"></i> Reports
+      </a>
+      <a href="login.html" id="logoutLink">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </nav>
+
+    <div class="decor">
+      <span class="flower">🌸</span>
+      <span class="butterfly">🦋</span>
+      <span class="sparkle">✨</span>
+    </div>
+
+    <div class="premium">
+      <div class="crown">👑</div>
+      <h3>Go Premium 💎</h3>
+      <p>Unlock advanced reports, custom categories and more amazing features.</p>
+      <button type="button">Upgrade Now ✨</button>
+    </div>
+
+    <div class="profile">
+      <div class="avatar">👩🏻</div>
+      <div>
+        <strong>Hello, <span class="user-name"></span>! 👑</strong>
+        <small><span class="user-email"></span></small>
+      </div>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" type="button">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div></div>
+      <div class="date-pill">
+        <i class="fa-regular fa-calendar-days"></i> MyBudget Tracker 💗
+      </div>
+
+      <div class="notification-wrap">
+        <button class="bell" id="notificationBell" type="button">
+          <i class="fa-regular fa-bell"></i>
+          <span id="notificationCount">0</span>
+        </button>
+        <div class="notification-dropdown" id="notificationDropdown">
+          <div class="notification-head">
+            <h3>System Activity 💗</h3>
+            <small>Latest updates</small>
+          </div>
+          <div class="notification-list" id="notificationList">
+            <div class="notification-item">
+              <strong>Loading...</strong>
+              <small>Checking activities.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="page-section" id="dashboardPage">
+      <section class="welcome">
+        <div>
+          <h2>
+            <span id="greetingText"></span>,
+            <span class="user-name"></span>! 👑
+          </h2>
+          <p>Take control of your spending, one step at a time. 💗</p>
+        </div>
+        <button class="add-btn" id="openModal" type="button" disabled>
+          <i class="fa-solid fa-lock" id="addExpenseIcon"></i>
+          <span id="addExpenseLabel">Add Expense ✨</span>
+        </button>
+      </section>
+
+      <!-- FIRST-TIME BUDGET SETUP -->
+      <section class="budget-setup" id="budgetSetup" hidden>
+        <div class="setup-decoration">🎀</div>
+        <div class="setup-content">
+          <span class="setup-tag">
+            <i class="fa-solid fa-sparkles"></i> FIRST STEP
+          </span>
+          <h2>Let's set your monthly budget! 💗</h2>
+          <p>
+            Before tracking your expenses, tell us how much
+            you plan to spend this month. We'll help you
+            monitor your spending and remaining balance.
+          </p>
+
+          <div class="setup-steps">
+            <div class="setup-step">
+              <span class="step-number">1</span>
+              <span>Set your budget</span>
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="setup-step inactive">
+              <span class="step-number">2</span>
+              <span>Add expenses</span>
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="setup-step inactive">
+              <span class="step-number">3</span>
+              <span>Track spending</span>
+              <i class="fa-solid fa-chart-simple"></i>
+            </div>
+          </div>
+
+          <button id="startBudgetSetup" class="setup-btn" type="button">
+            <i class="fa-solid fa-piggy-bank"></i>
+            Set My Budget
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <small>✨ Your budget will be saved to your account.</small>
+        </div>
+      </section>
+
+      <!-- NORMAL MONTHLY BUDGET OVERVIEW -->
+      <section class="budget-panel panel" id="budgetOverview" hidden>
+        <div class="budget-heading">
+          <div>
+            <h3>My Monthly Budget 🎀</h3>
+            <p id="budgetMonthLabel">Current month</p>
+          </div>
+          <button class="add-btn" id="openBudget" type="button">
+            <i class="fa-solid fa-pen"></i> Edit Budget
+          </button>
+        </div>
+
+        <div class="budget-numbers">
+          <div>
+            <small>Monthly Budget</small>
+            <strong id="monthlyBudget">Not set</strong>
+          </div>
+          <div>
+            <small>Spent This Month</small>
+            <strong id="monthlySpent">₱0.00</strong>
+          </div>
+          <div>
+            <small>Remaining Budget</small>
+            <strong id="remainingBudget">—</strong>
+          </div>
+        </div>
+
+        <div class="budget-progress" id="budgetProgress"
+             role="progressbar"
+             aria-label="Budget used"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="0">
+          <span id="budgetProgressBar"></span>
+        </div>
+        <p class="budget-message" id="budgetMessage" role="status"></p>
+      </section>
+
+      <!-- DASHBOARD STATS -->
+      <section class="stats">
+        <div class="stat-card">
+          <div class="icon pink"><i class="fa-solid fa-wallet"></i></div>
+          <div>
+            <p>Total Expenses</p>
+            <h3 id="totalExpenses">₱0.00</h3>
+            <small class="green">Saved in database</small>
+          </div>
+          <span>✨</span>
+        </div>
+
+        <div class="stat-card">
+          <div class="icon lavender">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+          </div>
+          <div>
+            <p>This Week</p>
+            <h3 id="weekTotal">₱0.00</h3>
+            <small class="green">Current week</small>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="icon rose">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </div>
+          <div>
+            <p>This Month</p>
+            <h3 id="monthTotal">₱0.00</h3>
+            <small class="hot">Current month</small>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="icon purple">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+          <div>
+            <p>Total Records</p>
+            <h3 id="recordCount">0</h3>
+            <small>Saved expenses</small>
+          </div>
+          <span>💖</span>
+        </div>
+      </section>
+
+      <!-- CHARTS -->
+      <section class="charts">
+        <div class="panel overview">
+          <div class="panel-head">
+            <h3>Expenses Overview <span>💗</span></h3>
+            <button type="button">This Week <i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+          <canvas id="lineChart"></canvas>
+        </div>
+
+        <div class="panel category">
+          <div class="panel-head">
+            <h3>Expenses by Category <span>💗</span></h3>
+            <button type="button">This Month <i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+          <div class="category-flex">
+            <div class="donut-wrap">
+              <canvas id="donutChart"></canvas>
+              <div class="donut-center">
+                <strong id="donutTotal">₱0.00</strong>
+                <span>Total</span>
+                <em>🎀</em>
+              </div>
+            </div>
+            <div class="legend" id="legend"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- CATEGORIES PAGE -->
+    <section class="page-section" id="categoriesPage" style="display:none">
+      <div class="page-title">
+        <h2>Categories 💗</h2>
+        <p>Choose where your expenses belong.</p>
+      </div>
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <!-- REPORTS PAGE -->
+    <section class="page-section" id="reportsPage" style="display:none">
+      <div class="page-title">
+        <h2>All Reports 📊</h2>
+        <p>Summary report of your saved expenses.</p>
+      </div>
+
+      <section class="report-grid">
+        <div class="report-card">
+          <h3>Total Expenses</h3>
+          <strong id="reportTotal">₱0.00</strong>
+        </div>
+        <div class="report-card">
+          <h3>Total Records</h3>
+          <strong id="reportRecords">0</strong>
+        </div>
+        <div class="report-card">
+          <h3>Highest Expense</h3>
+          <strong id="reportHighest">₱0.00</strong>
+        </div>
+        <div class="report-card">
+          <h3>Most Used Category</h3>
+          <strong id="reportTopCategory">None</strong>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="table-head">
+          <h3>Expense Report List 💗</h3>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Title</th><th>Category</th>
+                <th>Amount</th><th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="reportTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- EXPENSES TABLE -->
+    <section class="panel table-panel page-section" id="expenses-section">
+      <div class="table-head">
+        <h3>Recent Expenses 💗</h3>
+        <div>
+          <input type="search" id="searchInput"
+                 placeholder="Search expense or category...">
+          <a href="#expenses-section">View All</a>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Title</th><th>Category</th>
+              <th>Amount</th><th>Date</th><th>Notes</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTable">
+            <tr>
+              <td colspan="7" class="empty">
+                No expenses yet. Set your budget to get started. 💗
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- SET BUDGET MODAL -->
+  <div class="modal" id="budgetModal" role="dialog"
+       aria-modal="true" aria-labelledby="budgetModalTitle">
+    <form class="modal-card" id="budgetForm">
+      <button type="button" class="close" id="closeBudgetModal"
+              aria-label="Close">×</button>
+
+      <h2 id="budgetModalTitle">Set Monthly Budget 🎀</h2>
+      <p class="budget-hint">
+        Choose a month and enter your spending budget.
+      </p>
+
+      <label>
+        Month
+        <input type="month" id="budgetMonth" name="month" required>
+      </label>
+      <label>
+        Budget (₱)
+        <input type="number" id="budgetAmount" name="amount"
+               min="0.01" max="99999999.99" step="0.01"
+               placeholder="e.g. 5000.00" required>
+      </label>
+
+      <p id="budgetError" class="budget-error" role="alert"></p>
+
+      <button class="save-btn" type="submit">
+        Save My Budget 💗
+      </button>
+    </form>
+  </div>
+
+  <!-- ADD / EDIT EXPENSE MODAL -->
+  <div class="modal" id="expenseModal">
+    <form class="modal-card" id="expenseForm">
+      <button type="button" class="close" id="closeModal">×</button>
+      <h2 id="modalTitle">Add New Expense 💗</h2>
+      <input type="hidden" id="expenseId">
+
+      <label>
+        Title
+        <input id="title" name="title" required
+               maxlength="100" placeholder="e.g. Milk tea">
+      </label>
+
+      <label>
+        Category
+        <select id="category" name="category" required>
+          <option>Foods</option>
+          <option>Drinks</option>
+          <option>School</option>
+          <option>Personal</option>
+          <option>Needs</option>
+          <option>Wants</option>
+          <option>Groceries</option>
+          <option>Electronics</option>
+          <option>Bills</option>
+          <option>Other</option>
+        </select>
+      </label>
+
+      <label>
+        Amount
+        <input id="amount" name="amount" type="number"
+               required min="0.01" step="0.01" placeholder="0.00">
+      </label>
+
+      <label>
+        Date
+        <input id="expense_date" name="expense_date"
+               type="date" required>
+      </label>
+
+      <label>
+        Notes
+        <textarea id="notes" name="notes"
+                  placeholder="Optional notes"></textarea>
+      </label>
+
+      <button class="save-btn" type="submit">
+        Save Expense ✨
+      </button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/auth.js"></script>
+  <script src="assets/script.js"></script>
+
+  <!-- NOTIFICATIONS -->
+  <script>
+    const notificationBell =
+      document.getElementById("notificationBell");
+    const notificationDropdown =
+      document.getElementById("notificationDropdown");
+    const notificationList =
+      document.getElementById("notificationList");
+    const notificationCount =
+      document.getElementById("notificationCount");
+
+    notificationBell.addEventListener("click", e => {
+      e.stopPropagation();
+      notificationDropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", e => {
+      if (!notificationDropdown.contains(e.target) &&
+          !notificationBell.contains(e.target)) {
+        notificationDropdown.classList.remove("show");
+      }
+    });
+
+    function loadSystemActivities() {
+      const records = Array.isArray(expenses) ? expenses : [];
+      const activities = [];
+
+      activities.push({
+        title: "Welcome to MyBudget",
+        message: "Your spending dashboard is ready."
+      });
+
+      if (typeof hasBudget === "function" &&
+          !hasBudget(currentMonth())) {
+        activities.push({
+          title: "Set your monthly budget",
+          message: "Start by setting a budget before adding expenses."
+        });
+      } else {
+        activities.push({
+          title: "Monthly budget",
+          message: "Your budget is set. You can now record expenses."
+        });
+      }
+
+      if (records.length) {
+        const total = records.reduce(
+          (sum, item) => sum + Number(item.amount || 0), 0
+        );
+
+        activities.push({
+          title: "Expense records",
+          message: `${records.length} saved expense(s), totaling ${peso(total)}.`
+        });
+
+        const latest = records[0];
+        activities.push({
+          title: "Latest expense",
+          message: `${latest.title} - ${peso(latest.amount)}`
+        });
+      } else {
+        activities.push({
+          title: "No expenses recorded",
+          message: "Your expense list is currently empty."
+        });
+      }
+
+      notificationCount.textContent = activities.length;
+      notificationList.replaceChildren();
+
+      activities.forEach(activity => {
+        const div = document.createElement("div");
+        div.className = "notification-item";
+        const strong = document.createElement("strong");
+        strong.textContent = activity.title;
+        const small = document.createElement("small");
+        small.textContent = activity.message;
+        div.append(strong, small);
+        notificationList.appendChild(div);
+      });
+    }
+
+    window.refreshSystemActivities = loadSystemActivities;
+    loadSystemActivities();
+  </script>
+</body>
+</html>
